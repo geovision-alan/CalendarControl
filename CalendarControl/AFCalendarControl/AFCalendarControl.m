@@ -19,6 +19,9 @@
 #import "NSString+Additions.h"
 #import "AFMacro.h"
 
+#import "AFConfiguration.h"
+#import "RenderText.h"
+
 NSString *const AFContentDatesBinding = @"contentDate";
 NSString *const AFDateHighlightedBinding = @"highlightedDays";
 
@@ -29,7 +32,7 @@ NSSTRING_CONTEXT(AFCalendarControlSelectionObservationContext);
 
 #define AFCALENDAR_MONTH_FORMAT    @"MMMM y"
 
-static const NSUInteger _AFCalendarControlTotalWeekRows = 6;
+static const NSUInteger _AFCalendarControlTotalWeekRows = k_default_calender_show_week_per_month;
 
 @interface AFCalendarControl ()
 @property (retain) NSMutableDictionary *bindingInfo;
@@ -255,7 +258,7 @@ NS_INLINE NSRect _AFDayRectForRowRect(NSRect rowRect, NSUInteger column, NSUInte
 		[self _setEdgeDateComponents:date index:0];
 	} else if (edge == NSMaxYEdge) {
 		[self _setEdgeDateComponents:date index:1];
-	} else [NSException raise:NSInvalidArgumentException format:@"%s, valid values are NSMinYEdge and NSMaxYEdge.", __PRETTY_FUNCTION__, NSStringFromClass([self class]), _cmd];
+	} else [NSException raise:NSInvalidArgumentException format:@"%s, %@, %@ valid values are NSMinYEdge and NSMaxYEdge.", __PRETTY_FUNCTION__, NSStringFromClass([self class]), NSStringFromSelector(_cmd)];
 }
 
 NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRect, NSUInteger rows) {
@@ -273,46 +276,83 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
 }
 
 - (void)drawRect:(NSRect)frame {
-    NSLog(@"Dibujando...");
+    //NSLog(@"Dibujando...");
     
 	NSRect titleRect, calendarRect;
 	_AFCalendarControlBoundsRects([self bounds], &titleRect, &calendarRect);
 	
 	NSBezierPath *backgroundPath = [NSBezierPath bezierPathWithRect:[self bounds]];
-    
-	[[NSColor lightGrayColor] set];
-	[backgroundPath stroke];
 	
 	BOOL drawKey = [[self window] isKeyWindow];
 	
 	NSGradient *titleGradient = nil;
 	if (drawKey) {
+        NSColor* beginColor = \
+            [NSColor colorWithCalibratedRed:k_default_calendar_key_title_background_color_begin[0] \
+                                      green:k_default_calendar_key_title_background_color_begin[1] \
+                                      blue:k_default_calendar_key_title_background_color_begin[2] \
+                                      alpha:k_default_calendar_key_title_background_color_begin[3]];
+        NSColor* middleColor = \
+            [NSColor colorWithCalibratedRed:k_default_calendar_key_title_background_color_middle[0] \
+                                      green:k_default_calendar_key_title_background_color_middle[1] \
+                                      blue:k_default_calendar_key_title_background_color_middle[2] \
+                                      alpha:k_default_calendar_key_title_background_color_middle[3]];
+        NSColor* endColor = \
+            [NSColor colorWithCalibratedRed:k_default_calendar_key_title_background_color_end[0] \
+                                      green:k_default_calendar_key_title_background_color_end[1] \
+                                      blue:k_default_calendar_key_title_background_color_end[2] \
+                                      alpha:k_default_calendar_key_title_background_color_end[3]];
 		titleGradient = [[NSGradient alloc] initWithColorsAndLocations:
-						 [NSColor colorWithCalibratedRed:(233.0/255.0) green:(237.0/255.0) blue:(242.0/255.0) alpha:1.0], 0.0,
-						 [NSColor colorWithCalibratedRed:(210.0/255.0) green:(219.0/255.0) blue:(228.0/255.0) alpha:1.0], (NSHeight(titleRect)/NSHeight([self bounds])),
-						 [NSColor colorWithCalibratedRed:(191.0/255.0) green:(199.0/255.0) blue:(207.0/255.0) alpha:1.0], 1.0,
+						 beginColor, 0.0,
+						 middleColor, (NSHeight(titleRect)/NSHeight([self bounds])),
+						 endColor, 1.0,
 						 nil];
 	} else {
-		titleGradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:(242.0/255.0) alpha:1.0] endingColor:[NSColor colorWithCalibratedWhite:(227.0/255.0) alpha:1.0]];
+        NSColor* beginColor = \
+            [NSColor colorWithCalibratedRed:k_default_calendar_non_key_title_background_color_begin[0] \
+                                      green:k_default_calendar_non_key_title_background_color_begin[1] \
+                                      blue:k_default_calendar_non_key_title_background_color_begin[2] \
+                                      alpha:k_default_calendar_non_key_title_background_color_begin[3]];
+        NSColor* endColor = \
+            [NSColor colorWithCalibratedRed:k_default_calendar_non_key_title_background_color_end[0] \
+                                      green:k_default_calendar_non_key_title_background_color_end[1] \
+                                      blue:k_default_calendar_non_key_title_background_color_end[2] \
+                                      alpha:k_default_calendar_non_key_title_background_color_end[3]];
+		titleGradient = [[NSGradient alloc] initWithStartingColor:beginColor endingColor:endColor];
 	}
-	[titleGradient drawInBezierPath:backgroundPath angle:-90];
+	[titleGradient drawInBezierPath:backgroundPath angle:k_default_calendar_title_background_color_angle];
 	[titleGradient release];
 	
-	NSShadow *whiteShadow = [[NSShadow alloc] init];
-	[whiteShadow setShadowColor:[NSColor whiteColor]];
-	[whiteShadow setShadowOffset:NSMakeSize(0, -1.0)];
-	[whiteShadow setShadowBlurRadius:0.0];
+	NSShadow *shadow = [[NSShadow alloc] init];
+    NSColor* shadowColor = \
+        [NSColor colorWithCalibratedRed:k_default_calendar_title_shadow_color[0] \
+                                  green:k_default_calendar_title_shadow_color[1] \
+                                  blue:k_default_calendar_title_shadow_color[2] \
+                                  alpha:k_default_calendar_title_shadow_color[3]];
+	[shadow setShadowColor:shadowColor];
+	[shadow setShadowOffset:NSMakeSize(k_default_calendar_title_shadow_offset[0], \
+                                       k_default_calendar_title_shadow_offset[1])];
+	[shadow setShadowBlurRadius:k_default_calendar_title_shadow_blur_radius];
 	
 	[NSGraphicsContext saveGraphicsState];
 	
-	[whiteShadow set];
-	[whiteShadow release];
+	[shadow set];
+	[shadow release];
 	
 	[self _drawTitleRect:titleRect];
 	[NSGraphicsContext restoreGraphicsState];
 	
 	[self _drawCalendarRect:calendarRect];
     
+    NSColor* pathColor = \
+    [NSColor colorWithCalibratedRed:k_default_calendar_background_path_color[0] \
+                              green:k_default_calendar_background_path_color[1] \
+                              blue:k_default_calendar_background_path_color[2] \
+                              alpha:k_default_calendar_background_path_color[3]];
+    [pathColor set];
+    [backgroundPath setLineWidth:k_default_calendar_background_path_width];
+
+	[backgroundPath stroke];
 }
 
 - (void)resetCursorRects {
@@ -590,7 +630,10 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
 @implementation AFCalendarControl (PrivateDrawing)
 
 - (NSColor *)_textColor {
-	return [NSColor colorWithCalibratedWhite:(51.0/255.0) alpha:1.0];
+    return [NSColor colorWithCalibratedRed:k_default_calendar_title_text_color[0] \
+                                     green:k_default_calendar_title_text_color[1] \
+                                     blue:k_default_calendar_title_text_color[2] \
+                                     alpha:k_default_calendar_title_text_color[3]];
 }
 
 - (void)_drawTitleRect:(NSRect)titleRect {
@@ -599,21 +642,34 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
 	_AFCalendarControlTitleFrames(titleRect, &monthTitleRect, NULL, &dayTitlesRect);
   NSDate *currentMonth = [self valueForBinding:AFCurrentMonthBinding];
 	
-	[[self _textColor] set];
+	//[[self _textColor] set];
     /* // descriptionWithCalendarFormat is deprecated.
 	AKDrawStringAlignedInFrame([currentMonth descriptionWithCalendarFormat:@"%B %Y" timeZone:nil locale:[NSLocale currentLocale] ], [NSFont fontWithName:@"Helvetica Bold" size:1], NSCenterTextAlignment, NSIntegralRect(monthTitleRect));
      */
 
     
+    // month year
 	NSString *strMonth  =[_monthFormatter stringFromDate:currentMonth];
-    AKDrawStringAlignedInFrame(strMonth, [NSFont fontWithName:@"Helvetica Bold" size:1], NSCenterTextAlignment, NSIntegralRect(monthTitleRect));
+    NSFont* monYearFont = [NSFont fontWithName:k_default_calendar_month_year_font_name \
+                                          size:k_default_calendar_month_year_font_size];
+#if USE_AFDRAWSTRING
+    AKDrawStringAlignedInFrame(strMonth, monYearFont, NSCenterTextAlignment, NSIntegralRect(monthTitleRect));
+#else
+    [RenderText renderTextInFrame:strMonth \
+                             font:monYearFont \
+                             fontColor:[self _textColor] \
+                             frame:NSIntegralRect(monthTitleRect)];
+#endif
 	
-	NSShadow *selectedTextShadow = [[NSShadow alloc] init];
-	[selectedTextShadow setShadowOffset:NSMakeSize(0, -2)];
-	[selectedTextShadow setShadowBlurRadius:3.0];
+//	NSShadow *selectedTextShadow = [[NSShadow alloc] init];
+//	[selectedTextShadow setShadowOffset:NSMakeSize(0, -2)];
+//	[selectedTextShadow setShadowBlurRadius:3.0];
 	
 	NSArray *dayNames = [[self class] _dayNames];
 
+    // day, monday to sunday
+    NSFont* weekDayFont = [NSFont fontWithName:k_default_calendar_week_day_font_name \
+                                          size:k_default_calendar_week_day_font_size];
     NSUInteger firstDay = [[NSCalendar currentCalendar] firstWeekday];
     for (NSUInteger currentDay = 0; currentDay < [dayNames count]; currentDay++) {
         
@@ -624,15 +680,22 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
 		
 		[NSGraphicsContext saveGraphicsState];
 		
-		[[self _textColor] set];
+		//[[self _textColor] set];
 		NSString *string = [[dayNames objectAtIndex:dayIndex] capitalizedString];
-		
-		AKDrawStringAlignedInFrame(string, [NSFont boldSystemFontOfSize:1], NSCenterTextAlignment, dayRect);
+
+#if USE_AFDRAWSTRING
+		AKDrawStringAlignedInFrame(string, weekDayFont, NSCenterTextAlignment, dayRect);
+#else
+        [RenderText renderTextInFrame:string \
+                    font:weekDayFont \
+                    fontColor:[self _textColor] \
+                    frame:dayRect];
+#endif
 		
 		[NSGraphicsContext restoreGraphicsState];
 	}
 	
-	[selectedTextShadow release];
+	//[selectedTextShadow release];
 }
 
 - (void)_drawCalendarRect:(NSRect)calendarRect {
@@ -663,10 +726,10 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
 		NSRect currentRowRect = rowRects[currentRow];
 		
 		CGRect dayRects[7];
-		AFRectDivideEqually(currentRowRect, CGRectMinXEdge, 7, dayRects);
+		AFRectDivideEqually(NSRectToCGRect(currentRowRect), CGRectMinXEdge, 7, dayRects);
 		
 		for (NSUInteger currentColumn = SUNDAY-1; currentColumn < SATURDAY; currentColumn++, currentDay++) {
-			NSRect currentDayRect = dayRects[currentColumn];
+			NSRect currentDayRect = NSRectFromCGRect(dayRects[currentColumn]);
 			BOOL inRange = (currentRange == &(_calendarInfo.monthRanges[1]));
 			
 			AFCalendarControlCell *cell = (AFCalendarControlCell *)[self cell];
@@ -725,15 +788,30 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
 		[shiftTransform translateXBy:1.0 yBy:-1.0];
 		
 		NSBezierPath *gridShadow = [shiftTransform transformBezierPath:grid];
-		
-		[[NSColor colorWithCalibratedWhite:(255.0/255.0) alpha:0.8] set];
+		NSColor* shadowColor = [NSColor colorWithCalibratedRed:k_default_calendar_grid_path_shadow_color[0] \
+                                                         green:k_default_calendar_grid_path_shadow_color[1] \
+                                                         blue:k_default_calendar_grid_path_shadow_color[2] \
+                                                         alpha:k_default_calendar_grid_path_shadow_color[3]];
+		[shadowColor set];
 		[gridShadow stroke];
 		
+        NSColor* pathColor = nil;
 		if ([[self window] isKeyWindow])
-			[[NSColor colorWithCalibratedRed:(145.0/255.0) green:(159.0/255.0) blue:(177.0/255.0) alpha:1.0] set];
+        {
+            pathColor = [NSColor colorWithCalibratedRed:k_default_calendar_key_grid_path_color[0] \
+                                                  green:k_default_calendar_key_grid_path_color[1] \
+                                                   blue:k_default_calendar_key_grid_path_color[2] \
+                                                  alpha:k_default_calendar_key_grid_path_color[3]];
+        }
 		else
-			[[NSColor colorWithCalibratedWhite:(159.0/255.0) alpha:1.0] set];
-		
+        {
+			pathColor = [NSColor colorWithCalibratedRed:k_default_calendar_non_key_grid_path_color[0] \
+                                                  green:k_default_calendar_non_key_grid_path_color[1] \
+                                                   blue:k_default_calendar_non_key_grid_path_color[2] \
+                                                  alpha:k_default_calendar_non_key_grid_path_color[3]];
+        }
+    
+		[pathColor set];
 		[grid stroke];
 		
 		[NSGraphicsContext restoreGraphicsState];

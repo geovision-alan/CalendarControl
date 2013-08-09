@@ -135,7 +135,6 @@
 
 void AKDrawStringAlignedInFrame(NSString *text, NSFont *font, NSTextAlignment alignment, NSRect frame) {
 	NSCParameterAssert(font != nil);
-	
 	NSBezierPath *textPath = [NSBezierPath bezierPathWithString:text inFont:font];
 	NSRect textPathBounds = NSMakeRect(NSMinX([textPath bounds]), [font descender], NSWidth([textPath bounds]), [font ascender] - [font descender]);
 	
@@ -149,7 +148,7 @@ void AKDrawStringAlignedInFrame(NSString *text, NSFont *font, NSTextAlignment al
 	textPathBounds.size = [scale transformSize:textPathBounds.size];
 	
 	NSAffineTransform *originCorrection = [NSAffineTransform transform];
-	NSPoint centeredOrigin = AFRectCenteredSize(frame, textPathBounds.size).origin;
+	NSPoint centeredOrigin = NSPointFromCGPoint(AFRectCenteredSize(NSRectToCGRect(frame), NSSizeToCGSize(textPathBounds.size)).origin);
 	[originCorrection translateXBy:(centeredOrigin.x - NSMinX(textPathBounds)) yBy:(centeredOrigin.y - NSMinY(textPathBounds))];
 	[textPath transformUsingAffineTransform:originCorrection];
 	
