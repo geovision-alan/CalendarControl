@@ -2,7 +2,7 @@
 //  RenderText.h
 //
 //  Created by alantseng on 13/7/10.
-//  Copyright (c) 2013. All rights reserved.
+//  Copyright (c) 2013年 Geovision. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

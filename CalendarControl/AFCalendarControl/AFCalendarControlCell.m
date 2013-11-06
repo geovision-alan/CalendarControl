@@ -181,7 +181,7 @@
 	if (![self isEnabled]) return;
 	
     NSRect markFrame = frame;
-    CGFloat radius = (markFrame.size.width > markFrame.size.height) ? markFrame.size.height : markFrame.size.width;
+    CGFloat radius = MIN(markFrame.size.width, markFrame.size.height);
     markFrame.size.width  = radius * k_default_calendar_marker_oval_scale_factor;
     markFrame.size.height = radius * k_default_calendar_marker_oval_scale_factor;
     markFrame.origin.x = frame.origin.x + (frame.size.width - markFrame.size.width) * 0.5f;
