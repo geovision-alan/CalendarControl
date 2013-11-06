@@ -109,7 +109,8 @@ NS_INLINE NSRect _AFDayRectForRowRect(NSRect rowRect, NSUInteger column, NSUInte
     self = [super initWithFrame:frame];
 	if (self == nil) return nil;
 	
-	self.selectedDay = 1;
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[NSDate date]];
+	self.selectedDay = [components day];
 	self.highlightedDays = [NSMutableIndexSet indexSet];
 	
 	NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
@@ -156,6 +157,8 @@ NS_INLINE NSRect _AFDayRectForRowRect(NSRect rowRect, NSUInteger column, NSUInte
                                                object:nil];
     
     
+    _selectAction = nil;
+    _selectTarget = nil;
     
     return self;
 }
@@ -259,6 +262,12 @@ NS_INLINE NSRect _AFDayRectForRowRect(NSRect rowRect, NSUInteger column, NSUInte
 	} else if (edge == NSMaxYEdge) {
 		[self _setEdgeDateComponents:date index:1];
 	} else [NSException raise:NSInvalidArgumentException format:@"%s, %@, %@ valid values are NSMinYEdge and NSMaxYEdge.", __PRETTY_FUNCTION__, NSStringFromClass([self class]), NSStringFromSelector(_cmd)];
+}
+
+- (void) setSelectAction:(id)target action:(SEL)action
+{
+    _selectAction = action;
+    _selectTarget = target;
 }
 
 NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRect, NSUInteger rows) {
@@ -408,6 +417,14 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
 	[currentMonthDateComponents setDay:currentDay];
 	
 	[self _setSelectedDate:[calendar dateFromComponents:currentMonthDateComponents]];
+    
+    //NSLog(@"click, %d/%d/%d", [currentMonthDateComponents month], [currentMonthDateComponents day], [currentMonthDateComponents year]);
+    if (_selectTarget && [_selectTarget respondsToSelector:_selectAction])
+    {
+        //[[NSApplication sharedApplication] sendAction:_selectAction to:_selectTarget from:self];
+        [_selectTarget performSelector:_selectAction withObject:nil];
+    }
+    
 	if (monthDifference != 0) return;
 	
 	if (self.doubleAction != NULL && [event clickCount] >= 2) {
@@ -652,14 +669,11 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
 	NSString *strMonth  =[_monthFormatter stringFromDate:currentMonth];
     NSFont* monYearFont = [NSFont fontWithName:k_default_calendar_month_year_font_name \
                                           size:k_default_calendar_month_year_font_size];
-#if USE_AFDRAWSTRING
-    AKDrawStringAlignedInFrame(strMonth, monYearFont, NSCenterTextAlignment, NSIntegralRect(monthTitleRect));
-#else
+    //AKDrawStringAlignedInFrame(strMonth, monYearFont, NSCenterTextAlignment, NSIntegralRect(monthTitleRect));
     [RenderText renderTextInFrame:strMonth \
                              font:monYearFont \
                              fontColor:[self _textColor] \
                              frame:NSIntegralRect(monthTitleRect)];
-#endif
 	
 //	NSShadow *selectedTextShadow = [[NSShadow alloc] init];
 //	[selectedTextShadow setShadowOffset:NSMakeSize(0, -2)];
@@ -682,15 +696,12 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
 		
 		//[[self _textColor] set];
 		NSString *string = [[dayNames objectAtIndex:dayIndex] capitalizedString];
-
-#if USE_AFDRAWSTRING
-		AKDrawStringAlignedInFrame(string, weekDayFont, NSCenterTextAlignment, dayRect);
-#else
+		
+		//AKDrawStringAlignedInFrame(string, weekDayFont, NSCenterTextAlignment, dayRect);
         [RenderText renderTextInFrame:string \
                     font:weekDayFont \
                     fontColor:[self _textColor] \
                     frame:dayRect];
-#endif
 		
 		[NSGraphicsContext restoreGraphicsState];
 	}

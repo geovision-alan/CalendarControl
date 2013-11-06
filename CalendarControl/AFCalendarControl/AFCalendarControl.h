@@ -48,7 +48,8 @@ extern NSString *const AFDateHighlightedBinding;
     
     NSDateFormatter *_monthFormatter;
     
-
+    SEL _selectAction;
+    id  _selectTarget;
 }
 
 /*
@@ -56,8 +57,7 @@ extern NSString *const AFDateHighlightedBinding;
  This sets the current month date value too.
  */
 @property (assign) NSDate *selectedDate;
-
-@property (assign) NSDate *currentMonth; 
+@property (assign) NSDate *currentMonth;
 
 /*
  @brief
@@ -72,5 +72,7 @@ extern NSString *const AFDateHighlightedBinding;
 @property (assign) SEL doubleAction;
 
 @property (retain) NSMutableIndexSet *highlightedDays;
+
+- (void) setSelectAction:(id)target action:(SEL)action;
 
 @end

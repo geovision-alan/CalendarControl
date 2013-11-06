@@ -60,16 +60,13 @@
 	[shadow set];
 	
 	NSRect textBounds = [self titleRectForBounds:frame];
-
-#if USE_AFDRAWSTRING
-	[[self _textColor] set];
-	AKDrawStringAlignedInFrame([self stringValue], [self font], NSCenterTextAlignment, textBounds);
-#else
+	
+	//[[self _textColor] set];
+	//AKDrawStringAlignedInFrame([self stringValue], [self font], NSCenterTextAlignment, textBounds);
     [RenderText renderTextInFrame:[self stringValue] \
                              font:[self font] \
                              fontColor:[self _textColor] \
                              frame:textBounds];
-#endif
 	
 	if ([self isHighlighted]) {
         
@@ -183,7 +180,13 @@
 - (void)_drawBezelWithFrame:(NSRect)frame inView:(NSView *)view {
 	if (![self isEnabled]) return;
 	
-	NSBezierPath *bezel = [NSBezierPath bezierPathWithRect:frame];
+    NSRect markFrame = frame;
+    CGFloat radius = (markFrame.size.width > markFrame.size.height) ? markFrame.size.height : markFrame.size.width;
+    markFrame.size.width  = radius * k_default_calendar_marker_oval_scale_factor;
+    markFrame.size.height = radius * k_default_calendar_marker_oval_scale_factor;
+    markFrame.origin.x = frame.origin.x + (frame.size.width - markFrame.size.width) * 0.5f;
+    markFrame.origin.y = frame.origin.y + (frame.size.height - markFrame.size.height) * 0.5f;
+	NSBezierPath* bezel = [NSBezierPath bezierPathWithOvalInRect:markFrame];
 	
 	BOOL drawKey = [[view window] isKeyWindow];
 	
@@ -203,7 +206,7 @@
 		}
 		
 		[bezel fill];
-		[self _applyTodayShadow:bezel];
+		//[self _applyTodayShadow:bezel];
 	} else if ([self isToday] && ![self isSelected]){
 		if (drawKey) {
 			NSColor* color = [NSColor colorWithCalibratedRed:k_default_calendar_key_today_grid_color[0] \
@@ -220,7 +223,7 @@
 		}
 		
 		[bezel fill];
-		[self _applyTodayShadow:bezel];
+		//[self _applyTodayShadow:bezel];
 	} else if (![self isToday] && [self isSelected]) {
 		if (drawKey) {
 			
