@@ -24,13 +24,16 @@
 @implementation AFCalendarControlCell
 
 @synthesize today=_today, selected=_selected;
+@synthesize hasEvent = _hasEvent;
 
 - (id)init {
 	self = [super init];
 	
-    NSFont* font = [NSFont fontWithName:k_default_calendar_month_day_font_name \
-                                   size:k_default_calendar_month_day_font_size];
+    NSFont* font = [NSFont fontWithName:kDefaultCalendarMonthDayFontName \
+                                   size:kDefaultCalendarMonthDayFontSize];
 	[self setFont:font];
+    
+    _hasEvent = NO;
 	
 	return self;
 }
@@ -54,9 +57,9 @@
 	
 	NSShadow *shadow = [[NSShadow alloc] init];
 	[shadow setShadowColor:[self _shadowColor]];
-	[shadow setShadowOffset:NSMakeSize(k_default_calendar_grid_shadow_offset[0], \
-                                       k_default_calendar_grid_shadow_offset[1])];
-	[shadow setShadowBlurRadius:k_default_calendar_grid_shadow_blur_radius];
+	[shadow setShadowOffset:NSMakeSize(kDefaultCalendarGridShadowOffset[0], \
+                                       kDefaultCalendarGridShadowOffset[1])];
+	[shadow setShadowBlurRadius:kDefaultCalendarGridShadowBlurRadius];
 	[shadow set];
 	
 	NSRect textBounds = [self titleRectForBounds:frame];
@@ -96,82 +99,82 @@
 - (NSColor *)_textColor {
     if ([self isSelected])
     {
-        return [NSColor colorWithCalibratedRed:k_default_calendar_select_grid_text_color[0] \
-                                         green:k_default_calendar_select_grid_text_color[1] \
-                                         blue:k_default_calendar_select_grid_text_color[2] \
-                                         alpha:k_default_calendar_select_grid_text_color[3]];
+        return [NSColor colorWithCalibratedRed:kDefaultCalendarSelectGridTextColor[0] \
+                                         green:kDefaultCalendarSelectGridTextColor[1] \
+                                         blue:kDefaultCalendarSelectGridTextColor[2] \
+                                         alpha:kDefaultCalendarSelectGridTextColor[3]];
     }
     else if ([self isToday])
     {
-        return [NSColor colorWithCalibratedRed:k_default_calendar_today_grid_text_color[0] \
-                                         green:k_default_calendar_today_grid_text_color[1] \
-                                         blue:k_default_calendar_today_grid_text_color[2] \
-                                         alpha:k_default_calendar_today_grid_text_color[3]];
+        return [NSColor colorWithCalibratedRed:kDefaultCalendarTodayGridTextColor[0] \
+                                         green:kDefaultCalendarTodayGridTextColor[1] \
+                                         blue:kDefaultCalendarTodayGridTextColor[2] \
+                                         alpha:kDefaultCalendarTodayGridTextColor[3]];
     }
     else if ([self isEnabled])
     {
-        return [NSColor colorWithCalibratedRed:k_default_calendar_enable_grid_text_color[0] \
-                                         green:k_default_calendar_enable_grid_text_color[1] \
-                                         blue:k_default_calendar_enable_grid_text_color[2] \
-                                         alpha:k_default_calendar_enable_grid_text_color[3]];
+        return [NSColor colorWithCalibratedRed:kDefaultCalendarEnableGridTextColor[0] \
+                                         green:kDefaultCalendarEnableGridTextColor[1] \
+                                         blue:kDefaultCalendarEnableGridTextColor[2] \
+                                         alpha:kDefaultCalendarEnableGridTextColor[3]];
     }
 	else
     {
-        return [NSColor colorWithCalibratedRed:k_default_calendar_disable_grid_text_color[0] \
-                                         green:k_default_calendar_disable_grid_text_color[1] \
-                                         blue:k_default_calendar_disable_grid_text_color[2] \
-                                         alpha:k_default_calendar_disable_grid_text_color[3]];
+        return [NSColor colorWithCalibratedRed:kDefaultCalendarDisableGridTextColor[0] \
+                                         green:kDefaultCalendarDisableGridTextColor[1] \
+                                         blue:kDefaultCalendarDisableGridTextColor[2] \
+                                         alpha:kDefaultCalendarDisableGridTextColor[3]];
     }
 }
 
 - (NSColor *)_shadowColor {
     if ([self isSelected])
     {
-        return [NSColor colorWithCalibratedRed:k_default_calendar_select_grid_shadow_color[0] \
-                                         green:k_default_calendar_select_grid_shadow_color[1] \
-                                         blue:k_default_calendar_select_grid_shadow_color[2] \
-                                         alpha:k_default_calendar_select_grid_shadow_color[3]];
+        return [NSColor colorWithCalibratedRed:kDefaultCalendarSelectGridShadowColor[0] \
+                                         green:kDefaultCalendarSelectGridShadowColor[1] \
+                                         blue:kDefaultCalendarSelectGridShadowColor[2] \
+                                         alpha:kDefaultCalendarSelectGridShadowColor[3]];
     }
     else if ([self isToday])
     {
-        return [NSColor colorWithCalibratedRed:k_default_calendar_today_grid_shadow_color[0] \
-                                         green:k_default_calendar_today_grid_shadow_color[1] \
-                                         blue:k_default_calendar_today_grid_shadow_color[2] \
-                                         alpha:k_default_calendar_today_grid_shadow_color[3]];
+        return [NSColor colorWithCalibratedRed:kDefaultCalendarTodayGridShadowColor[0] \
+                                         green:kDefaultCalendarTodayGridShadowColor[1] \
+                                         blue:kDefaultCalendarTodayGridShadowColor[2] \
+                                         alpha:kDefaultCalendarTodayGridShadowColor[3]];
     }
     else if ([self isEnabled])
     {
-        return [NSColor colorWithCalibratedRed:k_default_calendar_enable_grid_shadow_color[0] \
-                                         green:k_default_calendar_enable_grid_shadow_color[1] \
-                                         blue:k_default_calendar_enable_grid_shadow_color[2] \
-                                         alpha:k_default_calendar_enable_grid_shadow_color[3]];
+        return [NSColor colorWithCalibratedRed:kDefaultCalendarEnableGridShadowColor[0] \
+                                         green:kDefaultCalendarEnableGridShadowColor[1] \
+                                         blue:kDefaultCalendarEnableGridShadowColor[2] \
+                                         alpha:kDefaultCalendarEnableGridShadowColor[3]];
     }
 	else
     {
-        return [NSColor colorWithCalibratedRed:k_default_calendar_disable_grid_shadow_color[0] \
-                                         green:k_default_calendar_disable_grid_shadow_color[1] \
-                                         blue:k_default_calendar_disable_grid_shadow_color[2] \
-                                         alpha:k_default_calendar_disable_grid_shadow_color[3]];
+        return [NSColor colorWithCalibratedRed:kDefaultCalendarDisableGridShadowColor[0] \
+                                         green:kDefaultCalendarDisableGridShadowColor[1] \
+                                         blue:kDefaultCalendarDisableGridShadowColor[2] \
+                                         alpha:kDefaultCalendarDisableGridShadowColor[3]];
     }
 }
 
 - (void)_applyTodayShadow:(NSBezierPath *)bezel {
 	NSShadow *interiorShadow = [[NSShadow alloc] init];
-    NSColor* shadowColor = [NSColor colorWithCalibratedRed:k_default_calendar_today_grid_interior_shadow_color[0] \
-                                                     green:k_default_calendar_today_grid_interior_shadow_color[1] \
-                                                     blue:k_default_calendar_today_grid_interior_shadow_color[2] \
-                                                     alpha:k_default_calendar_today_grid_interior_shadow_color[3]];
+    NSColor* shadowColor = [NSColor colorWithCalibratedRed:kDefaultCalendarTodayGridInteriorShadowColor[0] \
+                                                     green:kDefaultCalendarTodayGridInteriorShadowColor[1] \
+                                                     blue:kDefaultCalendarTodayGridInteriorShadowColor[2] \
+                                                     alpha:kDefaultCalendarTodayGridInteriorShadowColor[3]];
 	[interiorShadow setShadowColor:shadowColor];
-	[interiorShadow setShadowBlurRadius:k_default_calendar_today_grid_interior_shadow_radius];
+	[interiorShadow setShadowBlurRadius:kDefaultCalendarTodayGridInteriorShadowRadius];
 	
 	// Bottom and left sides
-	[interiorShadow setShadowOffset:NSMakeSize(NSWidth([bezel bounds])/k_default_calendar_today_grid_interior_shadow_offset[0], \
-                                               NSHeight([bezel bounds])/k_default_calendar_today_grid_interior_shadow_offset[1])];
+	[interiorShadow setShadowOffset:NSMakeSize(NSWidth([bezel bounds])/kDefaultCalendarTodayGridInteriorShadowOffset[0], \
+                                               NSHeight([bezel bounds])/kDefaultCalendarTodayGridInteriorShadowOffset[1])];
 	[bezel applyInnerShadow:interiorShadow];
 	
 	// Top and right sides
-	[interiorShadow setShadowOffset:NSMakeSize(-NSWidth([bezel bounds])/k_default_calendar_today_grid_interior_shadow_offset[2], \
-                                               -NSHeight([bezel bounds])/k_default_calendar_today_grid_interior_shadow_offset[3])];
+	[interiorShadow setShadowOffset:NSMakeSize(-NSWidth([bezel bounds])/kDefaultCalendarTodayGridInteriorShadowOffset[2], \
+                                               -NSHeight([bezel bounds])/kDefaultCalendarTodayGridInteriorShadowOffset[3])];
 	[bezel applyInnerShadow:interiorShadow];
 	
 	[interiorShadow release];
@@ -182,8 +185,8 @@
 	
     NSRect markFrame = frame;
     CGFloat radius = MIN(markFrame.size.width, markFrame.size.height);
-    markFrame.size.width  = radius * k_default_calendar_marker_oval_scale_factor;
-    markFrame.size.height = radius * k_default_calendar_marker_oval_scale_factor;
+    markFrame.size.width  = radius * kDefaultCalendarMarkerOvalScaleFactor;
+    markFrame.size.height = radius * kDefaultCalendarMarkerOvalScaleFactor;
     markFrame.origin.x = frame.origin.x + (frame.size.width - markFrame.size.width) * 0.5f;
     markFrame.origin.y = frame.origin.y + (frame.size.height - markFrame.size.height) * 0.5f;
 	NSBezierPath* bezel = [NSBezierPath bezierPathWithOvalInRect:markFrame];
@@ -192,16 +195,16 @@
 	
 	if ([self isToday] && [self isSelected]) {
 		if (drawKey) {
-			NSColor* color = [NSColor colorWithCalibratedRed:k_default_calendar_key_today_and_selected_grid_color[0] \
-                                                       green:k_default_calendar_key_today_and_selected_grid_color[1] \
-                                                       blue:k_default_calendar_key_today_and_selected_grid_color[2] \
-                                                       alpha:k_default_calendar_key_today_and_selected_grid_color[3]];
+			NSColor* color = [NSColor colorWithCalibratedRed:kDefaultCalendarKeyTodayAndSelectedGridColor[0] \
+                                                       green:kDefaultCalendarKeyTodayAndSelectedGridColor[1] \
+                                                       blue:kDefaultCalendarKeyTodayAndSelectedGridColor[2] \
+                                                       alpha:kDefaultCalendarKeyTodayAndSelectedGridColor[3]];
             [color set];
 		} else {
-			NSColor* color = [NSColor colorWithCalibratedRed:k_default_calendar_non_key_today_and_selected_grid_color[0] \
-                                                       green:k_default_calendar_non_key_today_and_selected_grid_color[1] \
-                                                       blue:k_default_calendar_non_key_today_and_selected_grid_color[2] \
-                                                       alpha:k_default_calendar_non_key_today_and_selected_grid_color[3]];
+			NSColor* color = [NSColor colorWithCalibratedRed:kDefaultCalendarNonKeyTodayAndSelectedGridColor[0] \
+                                                       green:kDefaultCalendarNonKeyTodayAndSelectedGridColor[1] \
+                                                       blue:kDefaultCalendarNonKeyTodayAndSelectedGridColor[2] \
+                                                       alpha:kDefaultCalendarNonKeyTodayAndSelectedGridColor[3]];
             [color set];
 		}
 		
@@ -209,16 +212,16 @@
 		//[self _applyTodayShadow:bezel];
 	} else if ([self isToday] && ![self isSelected]){
 		if (drawKey) {
-			NSColor* color = [NSColor colorWithCalibratedRed:k_default_calendar_key_today_grid_color[0] \
-                                                       green:k_default_calendar_key_today_grid_color[1] \
-                                                       blue:k_default_calendar_key_today_grid_color[2] \
-                                                       alpha:k_default_calendar_key_today_grid_color[3]];
+			NSColor* color = [NSColor colorWithCalibratedRed:kDefaultCalendarKeyTodayGridColor[0] \
+                                                       green:kDefaultCalendarKeyTodayGridColor[1] \
+                                                       blue:kDefaultCalendarKeyTodayGridColor[2] \
+                                                       alpha:kDefaultCalendarKeyTodayGridColor[3]];
             [color set];
 		} else {
-			NSColor* color = [NSColor colorWithCalibratedRed:k_default_calendar_non_key_today_grid_color[0] \
-                                                       green:k_default_calendar_non_key_today_grid_color[1] \
-                                                       blue:k_default_calendar_non_key_today_grid_color[2] \
-                                                       alpha:k_default_calendar_non_key_today_grid_color[3]];
+			NSColor* color = [NSColor colorWithCalibratedRed:kDefaultCalendarNonKeyTodayGridColor[0] \
+                                                       green:kDefaultCalendarNonKeyTodayGridColor[1] \
+                                                       blue:kDefaultCalendarNonKeyTodayGridColor[2] \
+                                                       alpha:kDefaultCalendarNonKeyTodayGridColor[3]];
             [color set];
 		}
 		
@@ -231,71 +234,89 @@
 			// The following non-today selected gradient was written by Jonathan Dann
 			//
 			
-			NSColor *baseColor = [NSColor colorWithCalibratedRed:k_default_calendar_key_selected_grid_base_color[0] \
-                                                       green:k_default_calendar_key_selected_grid_base_color[1] \
-                                                       blue:k_default_calendar_key_selected_grid_base_color[2] \
-                                                       alpha:k_default_calendar_key_selected_grid_base_color[3]];
-			NSColor *finalHighlightColor = [NSColor colorWithCalibratedRed:k_default_calendar_key_selected_grid_base_highlight_color[0] \
-                                                       green:k_default_calendar_key_selected_grid_base_highlight_color[1] \
-                                                       blue:k_default_calendar_key_selected_grid_base_highlight_color[2] \
-                                                       alpha:k_default_calendar_key_selected_grid_base_highlight_color[3]];
-			NSColor *baseHiglightColor = [NSColor colorWithCalibratedRed:k_default_calendar_key_selected_grid_final_highlight_color[0] \
-                                                       green:k_default_calendar_key_selected_grid_final_highlight_color[1] \
-                                                       blue:k_default_calendar_key_selected_grid_final_highlight_color[2] \
-                                                       alpha:k_default_calendar_key_selected_grid_final_highlight_color[3]];
+			NSColor *baseColor = [NSColor colorWithCalibratedRed:kDefaultCalendarKeySelectedGridBaseColor[0] \
+                                                       green:kDefaultCalendarKeySelectedGridBaseColor[1] \
+                                                       blue:kDefaultCalendarKeySelectedGridBaseColor[2] \
+                                                       alpha:kDefaultCalendarKeySelectedGridBaseColor[3]];
+			NSColor *finalHighlightColor = [NSColor colorWithCalibratedRed:kDefaultCalendarKeySelectedGridBaseHighlightColor[0] \
+                                                       green:kDefaultCalendarKeySelectedGridBaseHighlightColor[1] \
+                                                       blue:kDefaultCalendarKeySelectedGridBaseHighlightColor[2] \
+                                                       alpha:kDefaultCalendarKeySelectedGridBaseHighlightColor[3]];
+			NSColor *baseHiglightColor = [NSColor colorWithCalibratedRed:kDefaultCalendarKeySelectedGridFinalHighlightColor[0] \
+                                                       green:kDefaultCalendarKeySelectedGridFinalHighlightColor[1] \
+                                                       blue:kDefaultCalendarKeySelectedGridFinalHighlightColor[2] \
+                                                       alpha:kDefaultCalendarKeySelectedGridFinalHighlightColor[3]];
 			
 			NSGradient *gradient = \
                 [[NSGradient alloc] initWithColorsAndLocations:baseColor, \
-                                                               k_default_calendar_key_selected_grid_base_color_location, \
+                                                               kDefaultCalendarKeySelectedGridBaseColorLocation, \
                                                                baseHiglightColor, \
-                                                               k_default_calendar_key_selected_grid_base_highlight_color_location, \
+                                                               kDefaultCalendarKeySelectedGridBaseHighlightColorLocation, \
                                                                finalHighlightColor, \
-                                                               k_default_calendar_key_selected_grid_final_highlight_color_location, \
+                                                               kDefaultCalendarKeySelectedGridFinalHighlightColorLocation, \
                                                                nil];
-			[gradient drawInBezierPath:bezel angle:k_default_calendar_key_selected_grid_color_angle];
+			[gradient drawInBezierPath:bezel angle:kDefaultCalendarKeySelectedGridColorAngle];
 			[gradient release];
 		} else {
-			NSColor *baseColor = [NSColor colorWithCalibratedRed:k_default_calendar_non_key_selected_grid_base_color[0] \
-                                                       green:k_default_calendar_non_key_selected_grid_base_color[1] \
-                                                       blue:k_default_calendar_non_key_selected_grid_base_color[2] \
-                                                       alpha:k_default_calendar_non_key_selected_grid_base_color[3]];
-			NSColor *finalHighlightColor = [NSColor colorWithCalibratedRed:k_default_calendar_non_key_selected_grid_base_highlight_color[0] \
-                                                       green:k_default_calendar_non_key_selected_grid_base_highlight_color[1] \
-                                                       blue:k_default_calendar_non_key_selected_grid_base_highlight_color[2] \
-                                                       alpha:k_default_calendar_non_key_selected_grid_base_highlight_color[3]];
-			NSColor *baseHiglightColor = [NSColor colorWithCalibratedRed:k_default_calendar_non_key_selected_grid_final_highlight_color[0] \
-                                                       green:k_default_calendar_non_key_selected_grid_final_highlight_color[1] \
-                                                       blue:k_default_calendar_non_key_selected_grid_final_highlight_color[2] \
-                                                       alpha:k_default_calendar_non_key_selected_grid_final_highlight_color[3]];
+			NSColor *baseColor = [NSColor colorWithCalibratedRed:kDefaultCalendarNonKeySelectedGridBaseColor[0] \
+                                                       green:kDefaultCalendarNonKeySelectedGridBaseColor[1] \
+                                                       blue:kDefaultCalendarNonKeySelectedGridBaseColor[2] \
+                                                       alpha:kDefaultCalendarNonKeySelectedGridBaseColor[3]];
+			NSColor *finalHighlightColor = [NSColor colorWithCalibratedRed:kDefaultCalendarNonKeySelectedGridBaseHighlightColor[0] \
+                                                       green:kDefaultCalendarNonKeySelectedGridBaseHighlightColor[1] \
+                                                       blue:kDefaultCalendarNonKeySelectedGridBaseHighlightColor[2] \
+                                                       alpha:kDefaultCalendarNonKeySelectedGridBaseHighlightColor[3]];
+			NSColor *baseHiglightColor = [NSColor colorWithCalibratedRed:kDefaultCalendarNonKeySelectedGridFinalHighlightColor[0] \
+                                                       green:kDefaultCalendarNonKeySelectedGridFinalHighlightColor[1] \
+                                                       blue:kDefaultCalendarNonKeySelectedGridFinalHighlightColor[2] \
+                                                       alpha:kDefaultCalendarNonKeySelectedGridFinalHighlightColor[3]];
 			
 			NSGradient *gradient = \
                 [[NSGradient alloc] initWithColorsAndLocations:baseColor, \
-                                                               k_default_calendar_non_key_selected_grid_base_color_location, \
+                                                               kDefaultCalendarNonKeySelectedGridBaseColorLocation, \
                                                                baseHiglightColor, \
-                                                               k_default_calendar_non_key_selected_grid_base_highlight_color_location, \
+                                                               kDefaultCalendarNonKeySelectedGridBaseHighlightColorLocation, \
                                                                finalHighlightColor, \
-                                                               k_default_calendar_non_key_selected_grid_final_highlight_color_location, \
+                                                               kDefaultCalendarNonKeySelectedGridFinalHighlightColorLocation, \
                                                                nil];
-			[gradient drawInBezierPath:bezel angle:k_default_calendar_non_key_selected_grid_color_angle];
+			[gradient drawInBezierPath:bezel angle:kDefaultCalendarNonKeySelectedGridColorAngle];
 			[gradient release];
 		}
 	} else if (![self isToday] && ![self isSelected]) { /* the cell is enabled */
 		if (drawKey) {
-            NSColor* color = [NSColor colorWithCalibratedRed:k_default_calendar_key_grid_color[0] \
-                                                       green:k_default_calendar_key_grid_color[1] \
-                                                       blue:k_default_calendar_key_grid_color[2] \
-                                                       alpha:k_default_calendar_key_grid_color[3]];
+            NSColor* color = [NSColor colorWithCalibratedRed:kDefaultCalendarKeyGridColor[0] \
+                                                       green:kDefaultCalendarKeyGridColor[1] \
+                                                       blue:kDefaultCalendarKeyGridColor[2] \
+                                                       alpha:kDefaultCalendarKeyGridColor[3]];
             [color set];
 			[bezel fill];
 		} else {
-			NSColor* color = [NSColor colorWithCalibratedRed:k_default_calendar_non_key_grid_color[0] \
-                                                       green:k_default_calendar_non_key_grid_color[1] \
-                                                       blue:k_default_calendar_non_key_grid_color[2] \
-                                                       alpha:k_default_calendar_non_key_grid_color[3]];
+			NSColor* color = [NSColor colorWithCalibratedRed:kDefaultCalendarNonKeyGridColor[0] \
+                                                       green:kDefaultCalendarNonKeyGridColor[1] \
+                                                       blue:kDefaultCalendarNonKeyGridColor[2] \
+                                                       alpha:kDefaultCalendarNonKeyGridColor[3]];
             [color set];
 			[bezel fill];
 		}
 	}
+    
+    if (_hasEvent)
+    {
+        NSRect eventMarkFrame;
+        eventMarkFrame.size.width  = radius * kDefaultCalendarEventMarkerOvalScaleFactor;
+        eventMarkFrame.size.height = radius * kDefaultCalendarEventMarkerOvalScaleFactor;
+        eventMarkFrame.origin.x = frame.origin.x + (frame.size.width - eventMarkFrame.size.width) * 0.5f;
+        eventMarkFrame.origin.y = frame.origin.y + (frame.size.height - eventMarkFrame.size.height) * 0.5f;
+        NSBezierPath* eventBezel = [NSBezierPath bezierPathWithOvalInRect:eventMarkFrame];
+        
+        NSColor* eventMakrColor = [NSColor colorWithCalibratedRed:kDefaultCalendarEventGridMarkColor[0] \
+                                                            green:kDefaultCalendarEventGridMarkColor[1] \
+                                                             blue:kDefaultCalendarEventGridMarkColor[2] \
+                                                             alpha:kDefaultCalendarEventGridMarkColor[3]];
+        [eventMakrColor set];
+        [eventBezel setLineWidth:kDefaultCalendarEventGridMarkLineWidth];
+        [eventBezel stroke];
+    }
 }
 
 @end

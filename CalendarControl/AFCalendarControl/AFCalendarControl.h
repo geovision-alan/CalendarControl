@@ -50,6 +50,9 @@ extern NSString *const AFDateHighlightedBinding;
     
     SEL _selectAction;
     id  _selectTarget;
+    BOOL _enableAction;
+    
+    NSMutableArray* _eventsDateComponents;
 }
 
 /*
@@ -58,6 +61,7 @@ extern NSString *const AFDateHighlightedBinding;
  */
 @property (assign) NSDate *selectedDate;
 @property (assign) NSDate *currentMonth;
+@property (nonatomic, assign) BOOL enableAction;
 
 /*
  @brief
@@ -74,5 +78,10 @@ extern NSString *const AFDateHighlightedBinding;
 @property (retain) NSMutableIndexSet *highlightedDays;
 
 - (void) setSelectAction:(id)target action:(SEL)action;
+- (void) updateCalendar;
+
+// for events date
+- (void) clearEventsDate;
+- (void) setEventsDate:(NSArray*)eventsDate;
 
 @end

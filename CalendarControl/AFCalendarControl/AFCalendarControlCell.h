@@ -11,9 +11,11 @@
 @interface AFCalendarControlCell : NSCell {
  @private
 	BOOL _today, _selected;
+    BOOL _hasEvent;
 }
 
 @property (assign, getter=isToday) BOOL today;
 @property (assign, getter=isSelected) BOOL selected;
+@property (assign, nonatomic) BOOL hasEvent;
 
 @end

@@ -24,6 +24,7 @@
 		94AAE664142C08FB00AE45D3 /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 94AAE65E142C08FB00AE45D3 /* NSString+Additions.m */; };
 		94AAE666142C9D5D00AE45D3 /* calendar_header_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 94AAE665142C9D5D00AE45D3 /* calendar_header_bg.png */; };
 		E75FDD5A17B4CB1700DD015F /* RenderText.m in Sources */ = {isa = PBXBuildFile; fileRef = E75FDD5917B4CB1700DD015F /* RenderText.m */; };
+		E77A8DF1188E8EB9003375E3 /* AFConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = E77A8DF0188E8EB9003375E3 /* AFConfiguration.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,7 @@
 		E75FDD5717B4CB1700DD015F /* AFConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFConfiguration.h; path = CalendarControl/AFCalendarControl/AFConfiguration.h; sourceTree = "<group>"; };
 		E75FDD5817B4CB1700DD015F /* RenderText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderText.h; path = CalendarControl/AFCalendarControl/RenderText.h; sourceTree = "<group>"; };
 		E75FDD5917B4CB1700DD015F /* RenderText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RenderText.m; path = CalendarControl/AFCalendarControl/RenderText.m; sourceTree = "<group>"; };
+		E77A8DF0188E8EB9003375E3 /* AFConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFConfiguration.m; path = CalendarControl/AFCalendarControl/AFConfiguration.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				E75FDD5717B4CB1700DD015F /* AFConfiguration.h */,
+				E77A8DF0188E8EB9003375E3 /* AFConfiguration.m */,
 				E75FDD5817B4CB1700DD015F /* RenderText.h */,
 				E75FDD5917B4CB1700DD015F /* RenderText.m */,
 			);
@@ -249,6 +252,7 @@
 			files = (
 				94AAE632142C086100AE45D3 /* main.m in Sources */,
 				94AAE639142C086100AE45D3 /* CalendarControlAppDelegate.m in Sources */,
+				E77A8DF1188E8EB9003375E3 /* AFConfiguration.m in Sources */,
 				94AAE64E142C08EB00AE45D3 /* AFCalendarButton.m in Sources */,
 				94AAE64F142C08EB00AE45D3 /* AFCalendarControl.m in Sources */,
 				94AAE650142C08EB00AE45D3 /* AFCalendarControlCell.m in Sources */,
