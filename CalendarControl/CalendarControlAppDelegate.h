@@ -16,4 +16,6 @@
 @property (assign) IBOutlet AFCalendarControl* calendar;
 @property (assign) IBOutlet NSTextField* selectedDate;
 
+- (IBAction) pressRandomEvents:(id)sender;
+
 @end
