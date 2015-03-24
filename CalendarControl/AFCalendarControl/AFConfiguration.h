@@ -33,7 +33,12 @@ extern float const kDefaultCalendarWeekDayFontSize;
 extern NSString* const kDefaultCalendarMonthDayFontName;
 extern float const kDefaultCalendarMonthDayFontSize;
 
-extern float const kDefaultCalendarGridPathShadowColor[4];
+extern float const kDefaultCalendarWeekDayMarkColor[4];
+extern float const kDefaultCalendarWeekDayMarkLineWidth;
+extern float const kDefaultCalendarWeekDayMarkPadding;
+
+extern float const kDefaultCalendarKeyGridPathPadding;
+extern float const kDefaultCalendarKeyGridPathWidth;
 extern float const kDefaultCalendarKeyGridPathColor[4];
 extern float const kDefaultCalendarNonKeyGridPathColor[4];
 
@@ -53,26 +58,12 @@ extern float const kDefaultCalendarTodayGridInteriorShadowRadius;
 
 extern float const kDefaultCalendarKeyGridColor[4];
 extern float const kDefaultCalendarKeyTodayGridColor[4];
-extern float const kDefaultCalendarKeyTodayAndSelectedGridColor[4];
+extern float const kDefaultCalendarKeySelectedGridColor[4];
 extern float const kDefaultCalendarNonKeyGridColor[4];
 extern float const kDefaultCalendarNonKeyTodayGridColor[4];
-extern float const kDefaultCalendarNonKeyTodayAndSelectedGridColor[4];
+extern float const kDefaultCalendarNonKeySelectedGridColor[4];
 
-extern float const kDefaultCalendarKeySelectedGridBaseColor[4];
-extern float const kDefaultCalendarKeySelectedGridBaseHighlightColor[4];
-extern float const kDefaultCalendarKeySelectedGridFinalHighlightColor[4];
-extern float const kDefaultCalendarKeySelectedGridBaseColorLocation;
-extern float const kDefaultCalendarKeySelectedGridBaseHighlightColorLocation;
-extern float const kDefaultCalendarKeySelectedGridFinalHighlightColorLocation;
-extern float const kDefaultCalendarKeySelectedGridColorAngle;
-
-extern float const kDefaultCalendarNonKeySelectedGridBaseColor[4];
-extern float const kDefaultCalendarNonKeySelectedGridBaseHighlightColor[4];
-extern float const kDefaultCalendarNonKeySelectedGridFinalHighlightColor[4];
-extern float const kDefaultCalendarNonKeySelectedGridBaseColorLocation;
-extern float const kDefaultCalendarNonKeySelectedGridBaseHighlightColorLocation;
-extern float const kDefaultCalendarNonKeySelectedGridFinalHighlightColorLocation;
-extern float const kDefaultCalendarNonKeySelectedGridColorAngle;
+extern float const kDefaultCalendarKeyTodayMarkLineWidth;
 
 extern float const kDefaultCalendarMarkerOvalScaleFactor;
 extern float const kDefaultCalendarEventMarkerOvalScaleFactor;

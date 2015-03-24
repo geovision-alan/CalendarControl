@@ -158,7 +158,6 @@ NS_INLINE NSRect _AFDayRectForRowRect(NSRect rowRect, NSUInteger column, NSUInte
     
     _selectAction = nil;
     _selectTarget = nil;
-    _enableAction = YES;
     
     _eventsDateComponents = [[NSMutableArray alloc] init];
     
@@ -397,6 +396,8 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
                               alpha:kDefaultCalendarBackgroundPathColor[3]];
     [pathColor set];
     [backgroundPath setLineWidth:kDefaultCalendarBackgroundPathWidth];
+    [backgroundPath setLineCapStyle:NSRoundLineCapStyle];
+    [backgroundPath setLineJoinStyle:NSRoundLineJoinStyle];
 
 	[backgroundPath stroke];
 }
@@ -730,7 +731,7 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
 
     
     // month year
-	NSString *strMonth  =[_monthFormatter stringFromDate:currentMonth];
+	NSString *strMonth  =[[_monthFormatter stringFromDate:currentMonth] capitalizedString];
     NSFont* monYearFont = [NSFont fontWithName:kDefaultCalendarMonthYearFontName \
                                           size:kDefaultCalendarMonthYearFontSize];
     //AKDrawStringAlignedInFrame(strMonth, monYearFont, NSCenterTextAlignment, NSIntegralRect(monthTitleRect));
@@ -749,6 +750,12 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
     NSFont* weekDayFont = [NSFont fontWithName:kDefaultCalendarWeekDayFontName \
                                           size:kDefaultCalendarWeekDayFontSize];
     NSUInteger firstDay = [[NSCalendar currentCalendar] firstWeekday];
+    
+    NSDate *now = [NSDate date];
+    NSUInteger components = (NSWeekdayCalendarUnit);
+    NSDateComponents *nowComponents = [[NSCalendar currentCalendar] components:components fromDate:now];
+    NSInteger currentWeekDay = [nowComponents weekday];
+    
     for (NSUInteger currentDay = 0; currentDay < [dayNames count]; currentDay++) {
         
         NSInteger dayIndex = currentDay + firstDay -1;
@@ -759,14 +766,31 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
 		[NSGraphicsContext saveGraphicsState];
 		
 		//[[self _textColor] set];
-		NSString *string = [[dayNames objectAtIndex:dayIndex] capitalizedString];
+		NSString *string = [[dayNames objectAtIndex:dayIndex] uppercaseString];
 		
 		//AKDrawStringAlignedInFrame(string, weekDayFont, NSCenterTextAlignment, dayRect);
         [RenderText renderTextInFrame:string \
                     font:weekDayFont \
                     fontColor:[self _textColor] \
                     frame:dayRect];
-		
+        
+        if (currentWeekDay == (dayIndex+1))
+        {
+            NSColor* color = [NSColor colorWithDeviceRed:kDefaultCalendarWeekDayMarkColor[0] \
+                                                   green:kDefaultCalendarWeekDayMarkColor[1] \
+                                                    blue:kDefaultCalendarWeekDayMarkColor[2] \
+                                                    alpha:kDefaultCalendarWeekDayMarkColor[3]];
+            [color set];
+            
+            NSBezierPath* path = [NSBezierPath bezierPath];
+            [path moveToPoint:NSMakePoint(NSMinX(dayRect) + kDefaultCalendarWeekDayMarkPadding, NSMinY(dayRect))];
+            [path lineToPoint:NSMakePoint(NSMaxX(dayRect) - kDefaultCalendarWeekDayMarkPadding, NSMinY(dayRect))];
+            
+            [path setLineWidth:kDefaultCalendarWeekDayMarkLineWidth];
+            [path setLineCapStyle:NSRoundLineCapStyle];
+            [path setLineJoinStyle:NSRoundLineJoinStyle];
+            [path stroke];
+        }
 		[NSGraphicsContext restoreGraphicsState];
 	}
 	
@@ -796,19 +820,19 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
 	
 	NSRectArray rowRects = _AFCalendarControlCreateCalendarRowRects(calendarRect, kDefaultCalenderShowWeekPerMonth);
 	
-    
+    NSBezierPath* path = [NSBezierPath bezierPath];
 	for (NSUInteger currentRow = 0; currentRow < kDefaultCalenderShowWeekPerMonth; currentRow++) {
 		NSRect currentRowRect = rowRects[currentRow];
 		
 		CGRect dayRects[7];
 		AFRectDivideEqually(NSRectToCGRect(currentRowRect), CGRectMinXEdge, 7, dayRects);
 		
+        BOOL drawLine = NO;
 		for (NSUInteger currentColumn = SUNDAY-1; currentColumn < SATURDAY; currentColumn++, currentDay++) {
 			NSRect currentDayRect = NSRectFromCGRect(dayRects[currentColumn]);
 			BOOL inRange = (currentRange == &(_calendarInfo.monthRanges[1]));
 			
 			AFCalendarControlCell *cell = (AFCalendarControlCell *)[self cell];
-			
 			[currentMonthComponents setDay:currentDay];
 			[cell setToday:(inRange && [currentMonthComponents components:components match:nowComponents])];
 			
@@ -820,6 +844,20 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
 			[cell setStringValue:[NSString stringWithFormat:@"%d", currentDay]];
 			
 			[cell drawWithFrame:currentDayRect inView:self];
+            
+            if (inRange)
+            {
+                if (drawLine)
+                {
+                    [path lineToPoint:NSMakePoint(NSMaxX(currentDayRect)-kDefaultCalendarKeyGridPathPadding, NSMinY(currentDayRect))];
+                }
+                else
+                {
+                    [path moveToPoint:NSMakePoint(NSMinX(currentDayRect)+kDefaultCalendarKeyGridPathPadding, NSMinY(currentDayRect))];
+                    [path lineToPoint:NSMakePoint(NSMaxX(currentDayRect)-kDefaultCalendarKeyGridPathPadding, NSMinY(currentDayRect))];
+                    drawLine = YES;
+                }
+            }
 			
 			if (currentDay == (*currentRange).length) {
 				currentDay = 0;
@@ -833,43 +871,6 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
 	// Draw the grid
 	{
 		[NSGraphicsContext saveGraphicsState];
-		
-		NSBezierPath *grid = [NSBezierPath bezierPath];
-		
-		NSBezierPath *verticalLine = [NSBezierPath bezierPath];
-		[verticalLine moveToPoint:(NSPoint){NSMinX(calendarRect) + daySize.width, NSMinY(calendarRect)}];
-		[verticalLine lineToPoint:(NSPoint){NSMinX(calendarRect) + daySize.width, NSMaxY(calendarRect)}];
-        
-		NSAffineTransform *verticalLineTransform = [NSAffineTransform transform];
-		[verticalLineTransform translateXBy:daySize.width yBy:0];
-		
-		for (NSUInteger currentColumn = SUNDAY; currentColumn < SATURDAY; currentColumn++) {
-			[grid appendBezierPath:verticalLine];
-			[verticalLine transformUsingAffineTransform:verticalLineTransform];
-		}
-		
-		NSBezierPath *horizontalLine = [NSBezierPath bezierPath];
-		[horizontalLine moveToPoint:(NSPoint){NSMinX(calendarRect), NSMinY(calendarRect) + daySize.height}];
-		[horizontalLine lineToPoint:(NSPoint){NSMaxX(calendarRect), NSMinY(calendarRect) + daySize.height}];
-		
-		NSAffineTransform *horizontalLineTransform = [NSAffineTransform transform];
-		[horizontalLineTransform translateXBy:0 yBy:daySize.height];
-		
-		for (NSUInteger currentRow = 0; currentRow < kDefaultCalenderShowWeekPerMonth; currentRow++) {
-			[grid appendBezierPath:horizontalLine];
-			[horizontalLine transformUsingAffineTransform:horizontalLineTransform];
-		}
-		
-		NSAffineTransform *shiftTransform = [NSAffineTransform transform];
-		[shiftTransform translateXBy:1.0 yBy:-1.0];
-		
-		NSBezierPath *gridShadow = [shiftTransform transformBezierPath:grid];
-		NSColor* shadowColor = [NSColor colorWithCalibratedRed:kDefaultCalendarGridPathShadowColor[0] \
-                                                         green:kDefaultCalendarGridPathShadowColor[1] \
-                                                         blue:kDefaultCalendarGridPathShadowColor[2] \
-                                                         alpha:kDefaultCalendarGridPathShadowColor[3]];
-		[shadowColor set];
-		[gridShadow stroke];
 		
         NSColor* pathColor = nil;
 		if ([[self window] isKeyWindow])
@@ -887,8 +888,12 @@ NS_INLINE NSRectArray _AFCalendarControlCreateCalendarRowRects(NSRect calendarRe
                                                   alpha:kDefaultCalendarNonKeyGridPathColor[3]];
         }
     
+        [path setLineWidth:kDefaultCalendarKeyGridPathWidth];
 		[pathColor set];
-		[grid stroke];
+        
+        [path setLineCapStyle:NSRoundLineCapStyle];
+        [path setLineJoinStyle:NSRoundLineJoinStyle];
+		[path stroke];
 		
 		[NSGraphicsContext restoreGraphicsState];
 	}

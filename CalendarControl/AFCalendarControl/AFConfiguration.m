@@ -22,26 +22,31 @@ float const kDefaultCalendarTitleShadowColor[4]                           = {1.0
 float const kDefaultCalendarTitleShadowOffset[2]                          = {0.0f, -1.0f};
 float const kDefaultCalendarTitleShadowBlurRadius                         = 3.0f;
 
-float const kDefaultCalendarBackgroundPathColor[4]                        = {0.5f, 0.5f, 0.5f, 1.0f};
+float const kDefaultCalendarBackgroundPathColor[4]                        = {0.6902f, 0.6902f, 0.6902f, 1.0f};
 float const kDefaultCalendarBackgroundPathWidth                           = 2.0f;
 
-NSString* const kDefaultCalendarMonthYearFontName                         = @"Helvetica Bold";
+NSString* const kDefaultCalendarMonthYearFontName                         = @"Helvetica Neue";
 float const kDefaultCalendarMonthYearFontSize                             = 12.0f;
-NSString* const kDefaultCalendarWeekDayFontName                           = @"Helvetica Bold";
+NSString* const kDefaultCalendarWeekDayFontName                           = @"Helvetica Neue";
 float const kDefaultCalendarWeekDayFontSize                               = 12.0f;
-NSString* const kDefaultCalendarMonthDayFontName                          = @"Helvetica Bold";
+NSString* const kDefaultCalendarMonthDayFontName                          = @"Helvetica Neue";
 float const kDefaultCalendarMonthDayFontSize                              = 14.0f;
 
-float const kDefaultCalendarGridPathShadowColor[4]                        = {1.0f, 1.0f, 1.0f, 0.0f};
-float const kDefaultCalendarKeyGridPathColor[4]                           = {1.0f, 1.0f, 1.0f, 1.0f};
-float const kDefaultCalendarNonKeyGridPathColor[4]                        = {1.0f, 1.0f, 1.0f, 1.0f};
+float const kDefaultCalendarWeekDayMarkColor[4]                           = {1.0f, 1.0f, 1.0f, 1.0f};
+float const kDefaultCalendarWeekDayMarkLineWidth                          = 1.0f;
+float const kDefaultCalendarWeekDayMarkPadding                            = 5.0f;
+
+float const kDefaultCalendarKeyGridPathPadding                            = 5.0f;
+float const kDefaultCalendarKeyGridPathWidth                              = 1.0f;
+float const kDefaultCalendarKeyGridPathColor[4]                           = {0.8902f, 0.8902f, 0.8902f, 1.0f};
+float const kDefaultCalendarNonKeyGridPathColor[4]                        = {0.8902f, 0.8902f, 0.8902f, 1.0f};
 
 float const kDefaultCalendarSelectGridTextColor[4]                        = {1.0f, 1.0f, 1.0f, 1.0f};
-float const kDefaultCalendarTodayGridTextColor[4]                         = {1.0f, 1.0f, 1.0f, 1.0f};
+float const kDefaultCalendarTodayGridTextColor[4]                         = {0.0f, 0.0f, 0.0f, 1.0f};
 float const kDefaultCalendarEnableGridTextColor[4]                        = {0.0f, 0.0f, 0.0f, 1.0f};
 float const kDefaultCalendarDisableGridTextColor[4]                       = {0.5f, 0.5f, 0.5f, 0.5f};
 float const kDefaultCalendarSelectGridShadowColor[4]                      = {0.2f, 0.2f, 0.2f, 1.0f};
-float const kDefaultCalendarTodayGridShadowColor[4]                       = {0.2f, 0.2f, 0.2f, 1.0f};
+float const kDefaultCalendarTodayGridShadowColor[4]                       = {1.0f, 1.0f, 1.0f, 1.0f};
 float const kDefaultCalendarEnableGridShadowColor[4]                      = {1.0f, 1.0f, 1.0f, 1.0f};
 float const kDefaultCalendarDisableGridShadowColor[4]                     = {1.0f, 1.0f, 1.0f, 1.0f};
 float const kDefaultCalendarGridShadowOffset[2]                           = {0.0f, 0.0f};
@@ -51,27 +56,13 @@ float const kDefaultCalendarTodayGridInteriorShadowOffset[4]              = {30.
 float const kDefaultCalendarTodayGridInteriorShadowRadius                 = 2.0f;
 
 float const kDefaultCalendarKeyGridColor[4]                               = {1.0f, 1.0f, 1.0f, 1.0f};
-float const kDefaultCalendarKeyTodayGridColor[4]                          = {0.9f, 0.8f, 0.0f, 1.0f};
-float const kDefaultCalendarKeyTodayAndSelectedGridColor[4]               = {19.0f/255.0f, 36.0f/255.0f, 168.0f/255.0f, 1.0f};
+float const kDefaultCalendarKeyTodayGridColor[4]                          = {0.3451f, 0.9686f, 0.3451f, 1.0f};//{0.0f, 0.9725f, 0.0f, 1.0f};
+float const kDefaultCalendarKeySelectedGridColor[4]                       = {19.0f/255.0f, 36.0f/255.0f, 168.0f/255.0f, 1.0f};
 float const kDefaultCalendarNonKeyGridColor[4]                            = {1.0f, 1.0f, 1.0f, 1.0f};
-float const kDefaultCalendarNonKeyTodayGridColor[4]                       = {0.5f, 0.4f, 0.0f, 1.0f};
-float const kDefaultCalendarNonKeyTodayAndSelectedGridColor[4]            = {11.0f/255.0f, 25.0f/255.0f, 128.0f/255.0f, 1.0f};
+float const kDefaultCalendarNonKeyTodayGridColor[4]                       = {0.3451f, 0.9686f, 0.3451f, 1.0f};
+float const kDefaultCalendarNonKeySelectedGridColor[4]                    = {11.0f/255.0f, 25.0f/255.0f, 128.0f/255.0f, 1.0f};
 
-float const kDefaultCalendarKeySelectedGridBaseColor[4]                   = {41.0f/255.0f, 122.0f/255.0f, 214.0f/255.0f, 1.0f};
-float const kDefaultCalendarKeySelectedGridBaseHighlightColor[4]          = {66.0f/255.0f, 141.0f/255.0f, 227.0f/255.0f, 1.0f};
-float const kDefaultCalendarKeySelectedGridFinalHighlightColor[4]         = {78.0f/255.0f, 151.0f/255.0f, 233.0f/255.0f, 1.0f};
-float const kDefaultCalendarKeySelectedGridBaseColorLocation              = 0.0f;
-float const kDefaultCalendarKeySelectedGridBaseHighlightColorLocation     = 0.5f;
-float const kDefaultCalendarKeySelectedGridFinalHighlightColorLocation    = 1.0f;
-float const kDefaultCalendarKeySelectedGridColorAngle                     = 90.0f;
-
-float const kDefaultCalendarNonKeySelectedGridBaseColor[4]                = {21.0f/255.0f, 102.0f/255.0f, 194.0f/255.0f, 1.0f};
-float const kDefaultCalendarNonKeySelectedGridBaseHighlightColor[4]       = {46.0f/255.0f, 121.0f/255.0f, 207.0f/255.0f, 1.0f};
-float const kDefaultCalendarNonKeySelectedGridFinalHighlightColor[4]      = {58.0f/255.0f, 131.0f/255.0f, 213.0f/255.0f, 1.0f};
-float const kDefaultCalendarNonKeySelectedGridBaseColorLocation           = 0.0f;
-float const kDefaultCalendarNonKeySelectedGridBaseHighlightColorLocation  = 0.5f;
-float const kDefaultCalendarNonKeySelectedGridFinalHighlightColorLocation = 1.0f;
-float const kDefaultCalendarNonKeySelectedGridColorAngle                  = 90.0f;
+float const kDefaultCalendarKeyTodayMarkLineWidth = 1.0f;
 
 float const kDefaultCalendarMarkerOvalScaleFactor                         = 0.9f;
 float const kDefaultCalendarEventMarkerOvalScaleFactor                    = 0.9f;
