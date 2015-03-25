@@ -673,7 +673,7 @@
                     <button verticalHuggingPriority="750" id="x1G-Tb-6Ci">
                         <rect key="frame" x="280" y="315" width="134" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="random evetns" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="edz-FI-zAw">
+                        <buttonCell key="cell" type="push" title="random events" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="edz-FI-zAw">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
